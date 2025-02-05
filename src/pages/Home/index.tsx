@@ -5,11 +5,10 @@ import {
   StopCountdownButton,
 } from "./styles";
 
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as zod from "zod";
-import { useEffect, useState } from "react";
-import { differenceInSeconds } from "date-fns";
+import { useState } from "react";
 import { NewCycleForm } from "./components/NewCycleForm";
 import { Countdown } from "./components/Countdown";
 import { Cycle } from "../../@types";
@@ -28,15 +27,21 @@ type NewCycleFormDataProps = zod.infer<typeof newCycleFormValidationSchema>;
 export default function Home() {
   const [activeCycleId, setActiveCycleId] = useState<string | null>(null);
   const [cycles, setCycles] = useState<Cycle[]>([]);
+  const [amountSecondsPassed, setAmountSecondsPassed] = useState(0);
 
-  const { register, handleSubmit, watch, reset } =
-    useForm<NewCycleFormDataProps>({
-      resolver: zodResolver(newCycleFormValidationSchema),
-      defaultValues: {
-        task: "",
-        minutesAmount: 0,
-      },
-    });
+  const newCycleForm = useForm<NewCycleFormDataProps>({
+    resolver: zodResolver(newCycleFormValidationSchema),
+    defaultValues: {
+      task: "",
+      minutesAmount: 0,
+    },
+  });
+
+  const { reset, handleSubmit, watch } = newCycleForm;
+
+  function handleSetSecondsPassed(seconds: number) {
+    setAmountSecondsPassed(seconds);
+  }
 
   function markCurrentCycleAsFinished() {
     setCycles((state) =>
@@ -90,11 +95,15 @@ export default function Home() {
         value={{
           activeCycle,
           activeCycleId,
+          amountSecondsPassed,
           markCurrentCycleAsFinished,
+          handleSetSecondsPassed,
         }}
       >
         <form action="" onSubmit={handleSubmit(handleCreateNewCycle)}>
-          <NewCycleForm />
+          <FormProvider {...newCycleForm}>
+            <NewCycleForm />
+          </FormProvider>
 
           <Countdown />
 

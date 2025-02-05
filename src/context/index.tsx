@@ -1,11 +1,12 @@
-import { createContext, ReactNode, useContext } from "react";
+import { createContext, useContext } from "react";
 import { Cycle } from "../@types";
 
 interface CyclesContextTypeProps {
   activeCycle: Cycle | undefined;
   activeCycleId: string | null;
-  children?: ReactNode;
+  amountSecondsPassed: number;
   markCurrentCycleAsFinished: () => void;
+  handleSetSecondsPassed: (value: number) => void;
 }
 
 export const CyclesContext = createContext({} as CyclesContextTypeProps);
