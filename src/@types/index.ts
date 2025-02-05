@@ -6,3 +6,8 @@ export type Cycle = {
   interruptedDate?: Date;
   finishedDate?: Date;
 };
+
+export type CreateCycleData = {
+  task: string;
+  minutesAmount: number;
+};

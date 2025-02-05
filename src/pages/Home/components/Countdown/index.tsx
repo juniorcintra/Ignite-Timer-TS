@@ -7,8 +7,8 @@ export function Countdown() {
   const {
     activeCycle,
     activeCycleId,
-    markCurrentCycleAsFinished,
     amountSecondsPassed,
+    markCurrentCycleAsFinished,
     handleSetSecondsPassed,
   } = useCycles();
 
